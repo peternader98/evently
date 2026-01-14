@@ -1,4 +1,5 @@
 import 'package:evently/core/app_theme.dart';
+import 'package:evently/screens/onboarding/onboarding.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,10 +13,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.light,
+      initialRoute: Onboarding.routeName,
+      routes: {
+        Onboarding.routeName: (context) => const Onboarding(),
+      },
     );
   }
 }
