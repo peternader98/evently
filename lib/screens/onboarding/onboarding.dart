@@ -1,5 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/providers/theme_provider.dart';
+import 'package:evently/screens/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Onboarding extends StatelessWidget {
   static const String routeName = 'onboarding';
@@ -8,13 +11,15 @@ class Onboarding extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isLight = true;
+    ThemeProvider theme = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         title: Image.asset(
-          'assets/images/light_logo.png',
+          theme.themeMode == ThemeMode.light
+              ? 'assets/images/light_logo.png'
+              : 'assets/images/dark_logo.png',
           width: 142,
           height: 27,
         ),
@@ -27,7 +32,9 @@ class Onboarding extends StatelessWidget {
           spacing: 24,
           children: [
             Image.asset(
-              'assets/images/light_being_creative.png',
+              theme.themeMode == ThemeMode.light
+                  ? 'assets/images/light_being_creative.png'
+                  : 'assets/images/dark_being_creative.png',
               width: 343,
               height: 343,
             ),
@@ -84,8 +91,12 @@ class Onboarding extends StatelessWidget {
                     ),
                     const Spacer(),
                     ElevatedButton(
-                      // style: Theme.of(context).textButtonTheme.style,
-                      onPressed: () {},
+                      style: theme.themeMode == ThemeMode.light
+                          ? Theme.of(context).elevatedButtonTheme.style
+                          : Theme.of(context).textButtonTheme.style,
+                      onPressed: () {
+                        theme.changeTheme(ThemeMode.light);
+                      },
                       child: ImageIcon(
                         AssetImage('assets/images/sun.png'),
                         size: 24.0,
@@ -93,8 +104,12 @@ class Onboarding extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     ElevatedButton(
-                      style: Theme.of(context).textButtonTheme.style,
-                      onPressed: () {},
+                      style: theme.themeMode == ThemeMode.dark
+                          ? Theme.of(context).elevatedButtonTheme.style
+                          : Theme.of(context).textButtonTheme.style,
+                      onPressed: () {
+                        theme.changeTheme(ThemeMode.dark);
+                      },
                       child: ImageIcon(
                         AssetImage('assets/images/moon.png'),
                         size: 24.0,
@@ -110,7 +125,9 @@ class Onboarding extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed(OnboardingScreen.routeName);
+              },
               child: Text(
                 'startText'.tr(),
                 style: Theme.of(context).textTheme.displayMedium,
