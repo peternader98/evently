@@ -34,6 +34,11 @@ class AppTheme {
         fontWeight: FontWeight.w500,
         color: Color(0xFF0E3A99),
       ),
+      labelSmall: GoogleFonts.poppins(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFF0E3A99),
+      ),
       displayMedium: GoogleFonts.poppins(
         fontSize: 20,
         fontWeight: FontWeight.w500,
@@ -98,6 +103,11 @@ class AppTheme {
       labelMedium: GoogleFonts.poppins(
         fontSize: 18,
         fontWeight: FontWeight.w500,
+        color: Color(0xFFFFFFFF),
+      ),
+      labelSmall: GoogleFonts.poppins(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
         color: Color(0xFFFFFFFF),
       ),
       displayMedium: GoogleFonts.poppins(
