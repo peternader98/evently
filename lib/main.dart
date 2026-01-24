@@ -4,11 +4,14 @@ import 'package:evently/providers/theme_provider.dart';
 import 'package:evently/screens/onboarding/onboarding.dart';
 import 'package:evently/screens/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: WidgetsBinding.instance);
   await EasyLocalization.ensureInitialized();
+  FlutterNativeSplash.remove();
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en', 'US'), Locale('ar', 'EG')],
