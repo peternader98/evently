@@ -1,25 +1,26 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/providers/theme_provider.dart';
-import 'package:evently/screens/authentication/forget_password.dart';
-import 'package:evently/screens/authentication/register.dart';
+import 'package:evently/screens/authentication/login.dart';
 import 'package:evently/screens/authentication/widgets/evently_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Login extends StatefulWidget {
-  static const String routeName = 'login';
+class Register extends StatefulWidget {
+  static const String routeName = 'register';
 
-  const Login({super.key});
+  const Register({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _LoginState extends State<Login> {
+class _RegisterState extends State<Register> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
@@ -50,7 +51,7 @@ class _LoginState extends State<Login> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'loginTitle'.tr(),
+              'signUpTitle'.tr(),
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 24),
@@ -58,6 +59,13 @@ class _LoginState extends State<Login> {
               key: formKey,
               child: Column(
                 children: [
+                  EventlyTextfield(
+                    hint: 'userName'.tr(),
+                    controller: emailController,
+                    validation: 'Invalid Name',
+                    prefixIcon: 'user.png',
+                  ),
+                  const SizedBox(height: 16),
                   EventlyTextfield(
                     hint: 'userEmail'.tr(),
                     email: true,
@@ -73,44 +81,50 @@ class _LoginState extends State<Login> {
                     validation: 'Password Should Contain Special Characters',
                     prefixIcon: 'lock.png',
                   ),
+                  const SizedBox(height: 16),
+                  EventlyTextfield(
+                    hint: 'userPasswordConfirm'.tr(),
+                    password: true,
+                    controller: confirmPasswordController,
+                    validation: 'Password Should Contain Special Characters',
+                    prefixIcon: 'lock.png',
+                  ),
                 ],
               ),
             ),
-            const SizedBox(height: 8),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(context).colorScheme.primary,
-                  backgroundColor: Theme.of(context).colorScheme.surface,
-                ),
-                onPressed: () {
-                  Navigator.of(
-                    context,
-                  ).pushNamed(ForgetPassword.routeName);
-                },
-                child: Text('forgetPassword'.tr()),
-              ),
-            ),
-            const SizedBox(height: 48),
+            const SizedBox(height: 52),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                if (formKey.currentState!.validate()) {
+                  if (passwordController.text != confirmPasswordController.text) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Passwords do not match'),
+                      ),
+                    );
+                  } else {
+                    Navigator.of(
+                      context,
+                    ).pushReplacementNamed(Login.routeName);
+                  }
+                }
+              },
               child: Text(
-                'login'.tr(),
+                'signUp'.tr(),
                 style: Theme.of(context).textTheme.displayMedium,
               ),
             ),
-            const SizedBox(height: 48),
+            const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'signUpText'.tr(),
+                  'loginText'.tr(),
                   style: Theme.of(context).textTheme.displaySmall,
                 ),
                 TextButton(
@@ -121,9 +135,9 @@ class _LoginState extends State<Login> {
                   onPressed: () {
                     Navigator.of(
                       context,
-                    ).pushReplacementNamed(Register.routeName);
+                    ).pushReplacementNamed(Login.routeName);
                   },
-                  child: Text('signUp'.tr()),
+                  child: Text('login'.tr()),
                 ),
               ],
             ),

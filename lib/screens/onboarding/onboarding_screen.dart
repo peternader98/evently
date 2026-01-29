@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/models/intro_model.dart';
 import 'package:evently/providers/intro_provider.dart';
+import 'package:evently/screens/authentication/login.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:provider/provider.dart';
@@ -45,7 +46,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onPressed: () {
                   Navigator.of(
                     context,
-                  ).pushReplacementNamed(OnboardingScreen.routeName);
+                  ).pushReplacementNamed(Login.routeName);
                 },
                 child: Text(
                   'skip'.tr(),
@@ -147,16 +148,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           if (intro.currentPageIndex == 2) {
                             Navigator.of(
                               context,
-                            ).pushReplacementNamed(OnboardingScreen.routeName);
+                            ).pushReplacementNamed(Login.routeName);
                           }
                           intro.changePage(intro.currentPageIndex + 1);
                           introKey.currentState?.next();
-                          print(intro.currentPageIndex);
-                          // Navigator.of(
-                          //   context,
-                          // ).pushNamed(OnboardingScreen.routeName);
                         },
-                        child: Text('next'.tr()),
+                        child: intro.currentPageIndex == 2 ? Text('getStarted'.tr()) : Text('next'.tr()),
                       ),
                     ],
                   ),

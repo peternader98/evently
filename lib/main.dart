@@ -1,6 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/core/app_theme.dart';
 import 'package:evently/providers/theme_provider.dart';
+import 'package:evently/screens/authentication/forget_password.dart';
+import 'package:evently/screens/authentication/login.dart';
+import 'package:evently/screens/authentication/register.dart';
 import 'package:evently/screens/onboarding/onboarding.dart';
 import 'package:evently/screens/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +48,9 @@ class MyApp extends StatelessWidget {
       routes: {
         Onboarding.routeName: (context) => const Onboarding(),
         OnboardingScreen.routeName: (context) => const OnboardingScreen(),
+        Login.routeName: (context) => const Login(),
+        Register.routeName: (context) => const Register(),
+        ForgetPassword.routeName: (context) => const ForgetPassword(),
       },
     );
   }
