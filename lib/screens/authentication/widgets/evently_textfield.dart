@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 
 class EventlyTextfield extends StatefulWidget {
-  EventlyTextfield({
+  const EventlyTextfield({
     required this.hint,
     this.password = false,
     this.email = false,
     required this.validation,
     required this.prefixIcon,
     required this.controller,
+    this.confirmController,
     super.key,
   });
 
   final String hint;
-  late bool email;
-  late bool password;
-  String validation;
-  String prefixIcon;
-  TextEditingController controller;
+  final bool email;
+  final bool password;
+  final String validation;
+  final String prefixIcon;
+  final TextEditingController controller;
+  final TextEditingController? confirmController;
 
   @override
   State<EventlyTextfield> createState() => _EventlyTextfieldState();
@@ -38,7 +40,9 @@ class _EventlyTextfieldState extends State<EventlyTextfield> {
         }
         if (widget.password) {
           // Add more specific password validation (e.g., regex)
-          if (!RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$').hasMatch(value)) {
+          if (!RegExp(
+            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$',
+          ).hasMatch(value)) {
             return widget.validation;
           }
         }
@@ -50,8 +54,15 @@ class _EventlyTextfieldState extends State<EventlyTextfield> {
             return widget.validation;
           }
         }
-        if(!widget.password && !widget.email){
-          if(value.length < 3){
+        if (!widget.password && !widget.email) {
+          if (widget.controller.text.length < 3) {
+            return widget.validation;
+          }
+        }
+
+        if (widget.confirmController != null) {
+          if (widget.controller.text != widget.confirmController!.text) {
+            print('hi i\'m there not match');
             return widget.validation;
           }
         }
@@ -61,51 +72,64 @@ class _EventlyTextfieldState extends State<EventlyTextfield> {
         fillColor: Theme.of(context).colorScheme.onPrimary,
         filled: true,
         hintText: widget.hint,
-        hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSecondary, fontSize: 16),
+        hintStyle: TextStyle(
+          color: Theme.of(context).colorScheme.onSecondary,
+          fontSize: 16,
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: Theme.of(context).colorScheme.onPrimary),
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: Theme.of(context).colorScheme.onPrimary),
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
         ),
         contentPadding: EdgeInsets.all(16),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(width: 2, color: Theme.of(context).colorScheme.error),
+          borderSide: BorderSide(
+            width: 2,
+            color: Theme.of(context).colorScheme.error,
+          ),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(width: 2, color: Theme.of(context).colorScheme.error),
+          borderSide: BorderSide(
+            width: 2,
+            color: Theme.of(context).colorScheme.error,
+          ),
         ),
         prefixIcon: widget.password
             ? ImageIcon(AssetImage('assets/images/${widget.prefixIcon}'))
-        : ImageIcon(AssetImage('assets/images/${widget.prefixIcon}')),
+            : ImageIcon(AssetImage('assets/images/${widget.prefixIcon}')),
         suffixIcon: widget.password
             ? secure
-            ? IconButton(
-          icon: Icon(
-            secure ? Icons.visibility_off : Icons.visibility,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-          onPressed: () => {
-            setState(() {
-              secure = !secure;
-            }),
-          },
-        )
-            : IconButton(
-          icon: Icon(
-            secure ? Icons.visibility_off : Icons.visibility,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-          onPressed: () => {
-            setState(() {
-              secure = !secure;
-            }),
-          },
-        )
+                  ? IconButton(
+                      icon: Icon(
+                        secure ? Icons.visibility_off : Icons.visibility,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                      onPressed: () => {
+                        setState(() {
+                          secure = !secure;
+                        }),
+                      },
+                    )
+                  : IconButton(
+                      icon: Icon(
+                        secure ? Icons.visibility_off : Icons.visibility,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                      onPressed: () => {
+                        setState(() {
+                          secure = !secure;
+                        }),
+                      },
+                    )
             : null,
       ),
     );

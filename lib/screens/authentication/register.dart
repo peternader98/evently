@@ -61,7 +61,7 @@ class _RegisterState extends State<Register> {
                 children: [
                   EventlyTextfield(
                     hint: 'userName'.tr(),
-                    controller: emailController,
+                    controller: nameController,
                     validation: 'Invalid Name',
                     prefixIcon: 'user.png',
                   ),
@@ -86,7 +86,8 @@ class _RegisterState extends State<Register> {
                     hint: 'userPasswordConfirm'.tr(),
                     password: true,
                     controller: confirmPasswordController,
-                    validation: 'Password Should Contain Special Characters',
+                    confirmController: passwordController,
+                    validation: 'Password Should be match',
                     prefixIcon: 'lock.png',
                   ),
                 ],
