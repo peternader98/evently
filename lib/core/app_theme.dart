@@ -19,9 +19,19 @@ class AppTheme {
       onSurface: Color(0xFFB9B9B9),
     ),
     textTheme: TextTheme(
+      titleLarge: GoogleFonts.poppins(
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFF0E3A99),
+      ),
       titleMedium: GoogleFonts.poppins(
         fontSize: 20,
         fontWeight: FontWeight.w600,
+        color: Color(0xFF1C1C1C),
+      ),
+      titleSmall: GoogleFonts.poppins(
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
         color: Color(0xFF1C1C1C),
       ),
       bodySmall: GoogleFonts.poppins(
@@ -43,6 +53,11 @@ class AppTheme {
         fontSize: 20,
         fontWeight: FontWeight.w500,
         color: Color(0xFFFFFFFF),
+      ),
+      displaySmall: GoogleFonts.poppins(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: Color(0xFF686868),
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -90,10 +105,20 @@ class AppTheme {
       onSurface: Color(0xFFB9B9B9),
     ),
     textTheme: TextTheme(
+      titleLarge: GoogleFonts.poppins(
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFFFFFFFF),
+      ),
       titleMedium: GoogleFonts.poppins(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: Color(0xFFFFFFFF),
+      ),
+      titleSmall: GoogleFonts.poppins(
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
+        color: Color(0xFF1C1C1C),
       ),
       bodySmall: GoogleFonts.poppins(
         fontSize: 16,
@@ -114,6 +139,11 @@ class AppTheme {
         fontSize: 20,
         fontWeight: FontWeight.w500,
         color: Color(0xFFFFFFFF),
+      ),
+      displaySmall: GoogleFonts.poppins(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: Color(0xFFD6D6D6),
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(

@@ -16,5 +16,20 @@
   "next" : "Next",
   "skip" : "Skip",
   "back" : "Back",
-  "" : ""
+  "getStarted" : "Get Started",
+  "loginTitle" : "Login to your account",
+  "signUpTitle" : "Create your account",
+  "userEmail" : "Enter your email",
+  "userPassword" : "Enter your password",
+  "userPasswordConfirm" : "Confirm your password",
+  "userName" : "Enter your name",
+  "forgetPassword" : "Forget Password",
+  "login" : "Login",
+  "signUp" : "Sign up",
+  "resetPassword" : "Reset password",
+  "signUpText" : "Don’t have an account ?",
+  "loginText" : "Already have an account?",
+  "or" : "Or",
+  "loginWithGoogle" : "Login with Google",
+  "signUpWithGoogle" : "Sign up with Google"
 }

@@ -1,8 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/core/app_theme.dart';
+import 'package:evently/firebase_options.dart';
 import 'package:evently/providers/theme_provider.dart';
+import 'package:evently/screens/authentication/forget_password.dart';
+import 'package:evently/screens/authentication/login.dart';
+import 'package:evently/screens/authentication/register.dart';
+import 'package:evently/screens/home/home.dart';
 import 'package:evently/screens/onboarding/onboarding.dart';
 import 'package:evently/screens/onboarding/onboarding_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +18,9 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: WidgetsBinding.instance);
   await EasyLocalization.ensureInitialized();
   FlutterNativeSplash.remove();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en', 'US'), Locale('ar', 'EG')],
@@ -45,6 +54,10 @@ class MyApp extends StatelessWidget {
       routes: {
         Onboarding.routeName: (context) => const Onboarding(),
         OnboardingScreen.routeName: (context) => const OnboardingScreen(),
+        Login.routeName: (context) => const Login(),
+        Register.routeName: (context) => const Register(),
+        ForgetPassword.routeName: (context) => const ForgetPassword(),
+        Home.routeName: (context) => const Home(),
       },
     );
   }
