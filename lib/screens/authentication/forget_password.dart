@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/core/firebase_functions.dart';
 import 'package:evently/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,8 @@ class ForgetPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeProvider theme = Provider.of<ThemeProvider>(context);
+
+    String email = ModalRoute.of(context)!.settings.arguments as String;
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -43,7 +46,10 @@ class ForgetPassword extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                FirebaseFunctions.resetPassword(email);
+                Navigator.of(context).pop();
+              },
               child: Text(
                 'resetPassword'.tr(),
                 style: Theme.of(context).textTheme.displayMedium,

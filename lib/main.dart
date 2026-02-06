@@ -5,6 +5,7 @@ import 'package:evently/providers/theme_provider.dart';
 import 'package:evently/screens/authentication/forget_password.dart';
 import 'package:evently/screens/authentication/login.dart';
 import 'package:evently/screens/authentication/register.dart';
+import 'package:evently/screens/home/home.dart';
 import 'package:evently/screens/onboarding/onboarding.dart';
 import 'package:evently/screens/onboarding/onboarding_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
         Login.routeName: (context) => const Login(),
         Register.routeName: (context) => const Register(),
         ForgetPassword.routeName: (context) => const ForgetPassword(),
+        Home.routeName: (context) => const Home(),
       },
     );
   }

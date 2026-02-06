@@ -149,9 +149,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             Navigator.of(
                               context,
                             ).pushReplacementNamed(Login.routeName);
+                          } else {
+                            intro.changePage(intro.currentPageIndex + 1);
+                            introKey.currentState?.next();
                           }
-                          intro.changePage(intro.currentPageIndex + 1);
-                          introKey.currentState?.next();
                         },
                         child: intro.currentPageIndex == 2 ? Text('getStarted'.tr()) : Text('next'.tr()),
                       ),

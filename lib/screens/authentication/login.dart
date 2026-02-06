@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/core/firebase_functions.dart';
 import 'package:evently/providers/theme_provider.dart';
 import 'package:evently/screens/authentication/forget_password.dart';
 import 'package:evently/screens/authentication/register.dart';
 import 'package:evently/screens/authentication/widgets/evently_textfield.dart';
+import 'package:evently/screens/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -87,7 +89,7 @@ class _LoginState extends State<Login> {
                 onPressed: () {
                   Navigator.of(
                     context,
-                  ).pushNamed(ForgetPassword.routeName);
+                  ).pushNamed(ForgetPassword.routeName, arguments: emailController.text);
                 },
                 child: Text('forgetPassword'.tr()),
               ),
@@ -99,7 +101,14 @@ class _LoginState extends State<Login> {
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                if (formKey.currentState!.validate()) {
+                  FirebaseFunctions.login(
+                    emailController.text,
+                    passwordController.text,
+                  );
+                }
+              },
               child: Text(
                 'login'.tr(),
                 style: Theme.of(context).textTheme.displayMedium,
@@ -144,7 +153,12 @@ class _LoginState extends State<Login> {
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () async {
+                final user = await FirebaseFunctions.signInWithGoogle();
+                if (user != null) {
+                  Navigator.of(context).pushReplacementNamed(Home.routeName);
+                }
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

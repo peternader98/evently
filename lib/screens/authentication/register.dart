@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/core/firebase_functions.dart';
 import 'package:evently/providers/theme_provider.dart';
 import 'package:evently/screens/authentication/login.dart';
 import 'package:evently/screens/authentication/widgets/evently_textfield.dart';
@@ -102,17 +103,12 @@ class _RegisterState extends State<Register> {
               ),
               onPressed: () {
                 if (formKey.currentState!.validate()) {
-                  if (passwordController.text != confirmPasswordController.text) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Passwords do not match'),
-                      ),
-                    );
-                  } else {
-                    Navigator.of(
-                      context,
-                    ).pushReplacementNamed(Login.routeName);
-                  }
+                  FirebaseFunctions.createUser(
+                    nameController.text,
+                    emailController.text,
+                    passwordController.text,
+                  );
+                  Navigator.of(context).pushReplacementNamed(Login.routeName);
                 }
               },
               child: Text(
@@ -134,9 +130,7 @@ class _RegisterState extends State<Register> {
                     backgroundColor: Theme.of(context).colorScheme.surface,
                   ),
                   onPressed: () {
-                    Navigator.of(
-                      context,
-                    ).pushReplacementNamed(Login.routeName);
+                    Navigator.of(context).pushReplacementNamed(Login.routeName);
                   },
                   child: Text('login'.tr()),
                 ),
@@ -159,7 +153,9 @@ class _RegisterState extends State<Register> {
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                FirebaseFunctions.signInWithGoogle();
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -169,10 +165,7 @@ class _RegisterState extends State<Register> {
                     height: 24,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    'loginWithGoogle'.tr(),
-
-                  ),
+                  Text('loginWithGoogle'.tr()),
                 ],
               ),
             ),
