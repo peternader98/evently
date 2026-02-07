@@ -63,7 +63,6 @@ class FirebaseFunctions {
       );
 
       // Once signed in, return the UserCredential
-      print("credential : $credential");
       return await FirebaseAuth.instance.signInWithCredential(credential);
     } catch (e) {
       print(e);

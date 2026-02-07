@@ -107,6 +107,7 @@ class _LoginState extends State<Login> {
                     emailController.text,
                     passwordController.text,
                   );
+                  Navigator.of(context).pushReplacementNamed(Home.routeName);
                 }
               },
               child: Text(
