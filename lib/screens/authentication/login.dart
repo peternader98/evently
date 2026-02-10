@@ -148,7 +148,7 @@ class _LoginState extends State<Login> {
             ),
             const SizedBox(height: 24),
             TextButton(
-              style: ElevatedButton.styleFrom(
+              style: TextButton.styleFrom(
                 foregroundColor: Theme.of(context).colorScheme.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),

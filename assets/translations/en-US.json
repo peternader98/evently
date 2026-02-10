@@ -2,7 +2,9 @@
   "onboardingTitle" : "Personalize Your Experience",
   "onboardingSubtitle" : "Choose your preferred theme and language to get started with a comfortable, tailored experience that suits your style.",
   "language" : "Language",
+  "ar" : "AR",
   "arabic" : "Arabic",
+  "en" : "EN",
   "english" : "English",
   "theme" : "Theme",
   "startText" : "Let's start",
@@ -31,5 +33,16 @@
   "loginText" : "Already have an account?",
   "or" : "Or",
   "loginWithGoogle" : "Login with Google",
-  "signUpWithGoogle" : "Sign up with Google"
+  "signUpWithGoogle" : "Sign up with Google",
+  "welcomeBack" : "Welcome Back ✨",
+  "addEvent" : "Add Event",
+  "title" : "Title",
+  "eventTitle" : "Event Title",
+  "description" : "Description",
+  "eventDescription" : "Event Description",
+  "eventDate" : "Event Date",
+  "eventTime" : "Event Time",
+  "chooseDate" : "Choose date",
+  "chooseTime" : "Choose time",
+  "" : ""
 }
