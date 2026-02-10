@@ -1,14 +1,40 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evently/models/task_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseFunctions {
 
-  static Future<void> createUser(String name, String emailAddress, String password) async {
+  static CollectionReference<TaskModel> getTasksCollection() {
+    return FirebaseFirestore.instance
+        .collection('Tasks')
+        .withConverter<TaskModel>(
+      fromFirestore: (snapshot, options) {
+        return TaskModel.fromJson(snapshot.data()!);
+      },
+      toFirestore: (taskModel, options) {
+        return taskModel.toJson();
+      },
+    );
+  }
+  static Future<void> createTask(TaskModel task) {
+    var collection = getTasksCollection();
+    var doc = collection.doc();
+    task.id = doc.id;
+    return doc.set(task);
+  }
+
+  static Future<void> createUser(
+    String name,
+    String emailAddress,
+    String password,
+  ) async {
     try {
-      final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailAddress,
-        password: password,
-      );
+      final credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: emailAddress,
+            password: password,
+          );
       // save user data to firestore
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -24,8 +50,8 @@ class FirebaseFunctions {
   static Future<void> login(String emailAddress, String password) async {
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailAddress,
-          password: password
+        email: emailAddress,
+        password: password,
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -38,9 +64,7 @@ class FirebaseFunctions {
 
   static Future<void> resetPassword(String emailAddress) async {
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(
-        email: emailAddress,
-      );
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: emailAddress);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -54,7 +78,8 @@ class FirebaseFunctions {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
       // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
@@ -74,5 +99,4 @@ class FirebaseFunctions {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
   }
-
 }

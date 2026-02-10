@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/providers/home_provider.dart';
 import 'package:evently/screens/add_event/add_event.dart';
 import 'package:evently/screens/home/tabs/favorite_page.dart';
@@ -37,15 +38,15 @@ class Home extends StatelessWidget {
             items: [
               BottomNavigationBarItem(
                 icon: ImageIcon(AssetImage('assets/images/home.png')),
-                label: 'Home',
+                label: 'home'.tr(),
               ),
               BottomNavigationBarItem(
                 icon: ImageIcon(AssetImage('assets/images/heart.png')),
-                label: 'Favorite',
+                label: 'favorite'.tr(),
               ),
               BottomNavigationBarItem(
                 icon: ImageIcon(AssetImage('assets/images/user.png')),
-                label: 'Profile',
+                label: 'profile'.tr(),
               ),
             ],
           ),

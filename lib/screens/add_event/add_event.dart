@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/models/task_model.dart';
 import 'package:evently/providers/add_event_provider.dart';
 import 'package:evently/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,10 @@ import 'package:provider/provider.dart';
 class AddEvent extends StatelessWidget {
   static const String routeName = 'addEvent';
 
-  const AddEvent({super.key});
+  AddEvent({super.key});
+
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +42,7 @@ class AddEvent extends StatelessWidget {
                   child: Center(
                     child: Image.asset(
                       'assets/images/${theme.themeMode == ThemeMode.light ? 'light_' : 'dark_'}'
-                      '${addEvent.categories[addEvent.selectedIndex]}.png',
+                      '${addEvent.categories[addEvent.selectedIndex].toLowerCase().replaceAll(' ', '_')}.png',
                     ),
                   ),
                 ),
@@ -76,6 +80,7 @@ class AddEvent extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 TextField(
+                  controller: titleController,
                   cursorColor: Theme.of(context).colorScheme.primary,
                   style: Theme.of(context).textTheme.headlineSmall,
                   maxLines: 1,
@@ -107,6 +112,7 @@ class AddEvent extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 TextField(
+                  controller: descriptionController,
                   cursorColor: Theme.of(context).colorScheme.primary,
                   style: Theme.of(context).textTheme.headlineSmall,
                   maxLines: 7,
@@ -140,15 +146,34 @@ class AddEvent extends StatelessWidget {
                       spacing: 8,
                       children: [
                         ImageIcon(AssetImage('assets/images/calendar.png')),
-                        Text('eventDate'.tr(), style: Theme.of(context).textTheme.bodyMedium),
+                        Text(
+                          'eventDate'.tr(),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
                       ],
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        DateTime? chosenDate = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime.now().add(Duration(days: 365)),
+                          initialDate: addEvent.selectedDate,
+                        );
+                        if (chosenDate != null) {
+                          addEvent.changeDate(chosenDate);
+                        }
+                      },
                       style: TextButton.styleFrom(
                         backgroundColor: Theme.of(context).colorScheme.surface,
                       ),
-                      child: Text('chooseDate'.tr()),
+                      child: Text(
+                        addEvent.selectedDate != null
+                            ? DateFormat(
+                                'MMM dd, yyyy',
+                              ).format(addEvent.selectedDate!)
+                            : 'chooseDate'.tr(),
+                      ),
                     ),
                   ],
                 ),
@@ -159,15 +184,28 @@ class AddEvent extends StatelessWidget {
                       spacing: 8,
                       children: [
                         ImageIcon(AssetImage('assets/images/clock.png')),
-                        Text('eventTime'.tr(), style: Theme.of(context).textTheme.bodyMedium),
+                        Text(
+                          'eventTime'.tr(),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
                       ],
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        TimeOfDay? chosenTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        );
+                        if (chosenTime != null) {
+                          addEvent.changeTime(chosenTime);
+                        }
+                      },
                       style: TextButton.styleFrom(
                         backgroundColor: Theme.of(context).colorScheme.surface,
                       ),
-                      child: Text('chooseTime'.tr()),
+                      child: Text(
+                        addEvent.selectedTime?.format(context) ?? 'chooseTime'.tr(),
+                      ),
                     ),
                   ],
                 ),
@@ -179,7 +217,17 @@ class AddEvent extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      addEvent.addEvent(
+                        TaskModel(
+                          category: addEvent.categories[addEvent.selectedIndex],
+                          title: titleController.text,
+                          description: descriptionController.text,
+                          date: addEvent.selectedDate!.millisecondsSinceEpoch,
+                          time: addEvent.selectedTime!.toString(),
+                        ),
+                      );
+                    },
                     child: Text('addEvent'.tr()),
                   ),
                 ),

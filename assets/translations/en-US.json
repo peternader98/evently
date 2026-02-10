@@ -44,5 +44,7 @@
   "eventTime" : "Event Time",
   "chooseDate" : "Choose date",
   "chooseTime" : "Choose time",
-  "" : ""
+  "home" : "Home",
+  "favorite" : "Favorite",
+  "profile" : "Profile"
 }
