@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/core/firebase_functions.dart';
 import 'package:evently/providers/home_page_provider.dart';
 import 'package:evently/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -6,16 +7,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+
+  DateFormat formatter = DateFormat('dd MMM');
 
   @override
   Widget build(BuildContext context) {
     ThemeProvider theme = Provider.of<ThemeProvider>(context);
 
     return ChangeNotifierProvider(
-      create: (context) => HomePageProvider(),
+      create: (context) => HomePageProvider()..getStreamTasks(),
       builder: (context, child) {
         HomePageProvider homePage = Provider.of<HomePageProvider>(context);
+        HomePageProvider providerWatch = context.watch<HomePageProvider>();
 
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
@@ -100,24 +104,102 @@ class HomePage extends StatelessWidget {
                     itemCount: homePage.categories.length,
                   ),
                 ),
-                ListView.separated(
-                  itemBuilder: (context, index) {
-                    return Container(
-                      width: double.infinity,
-                      height: 193,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, index) => SizedBox(height: 16,),
-                  itemCount: 5,
+                Expanded(
+                  child: homePage.isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : homePage.errorMassage.isNotEmpty
+                      ? Center(child: Text(homePage.errorMassage))
+                      : providerWatch.events.isEmpty
+                      ? Center(child: Text('noEvents'.tr()))
+                      : ListView.separated(
+                          itemBuilder: (context, index) {
+                            return Container(
+                              width: double.infinity,
+                              height: 193,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: Image.asset(
+                                      'assets/images/${theme.themeMode == ThemeMode.light ? 'light_' : 'dark_'}${providerWatch.events[index].category.toLowerCase().replaceAll(' ', '_')}.png',
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.surface,
+                                          ),
+                                          child: Text(
+                                            formatter.format(
+                                              DateTime.fromMillisecondsSinceEpoch(
+                                                providerWatch.events[index].date,
+                                              ),
+                                            ),
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.headlineMedium,
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.surface,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                providerWatch.events[index].title,
+                                                style: Theme.of(
+                                                  context,
+                                                ).textTheme.headlineSmall,
+                                              ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  var task = providerWatch.events[index];
+                                                  task.isFavorite = !task.isFavorite;
+                                                  FirebaseFunctions.updateTask(task);
+                                                },
+                                                child: Icon(providerWatch.events[index].isFavorite ? Icons.favorite : Icons.favorite_border),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: 16),
+                          itemCount: providerWatch.events.length,
+                        ),
                 ),
               ],
             ),

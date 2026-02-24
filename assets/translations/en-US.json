@@ -46,5 +46,7 @@
   "chooseTime" : "Choose time",
   "home" : "Home",
   "favorite" : "Favorite",
-  "profile" : "Profile"
+  "profile" : "Profile",
+  "noEvents" : "No Events",
+  "" : ""
 }

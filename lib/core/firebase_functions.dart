@@ -17,11 +17,40 @@ class FirebaseFunctions {
       },
     );
   }
+
   static Future<void> createTask(TaskModel task) {
     var collection = getTasksCollection();
     var doc = collection.doc();
     task.id = doc.id;
     return doc.set(task);
+  }
+
+  static Future<void> updateTask(TaskModel task) {
+    var collection = getTasksCollection();
+    return collection.doc(task.id).update(task.toJson());
+  }
+
+  static Future<void> deleteTask(TaskModel task) {
+    var collection = getTasksCollection();
+    return collection.doc(task.id).delete();
+  }
+
+  static Stream<QuerySnapshot<TaskModel>> getStreamTasks({String? category}) {
+    var collection = getTasksCollection();
+    if (category != null) {
+      return collection.where('category', isEqualTo: category).snapshots();
+    }
+    return collection.snapshots();
+  }
+
+  static Stream<QuerySnapshot<TaskModel>> getFavoriteTasks() {
+    var collection = getTasksCollection();
+    return collection.where('isFavorite', isEqualTo: true).snapshots();
+  }
+
+  static Future<QuerySnapshot<TaskModel>> getTasks() {
+    var collection = getTasksCollection();
+    return collection.get();
   }
 
   static Future<void> createUser(

@@ -5,6 +5,7 @@ class TaskModel {
   String description;
   int date;
   String time;
+  bool isFavorite;
 
   TaskModel({
     this.id = '',
@@ -13,6 +14,7 @@ class TaskModel {
     required this.description,
     required this.date,
     required this.time,
+    this.isFavorite = false,
   });
 
   TaskModel.fromJson(Map<String, dynamic> json)
@@ -23,6 +25,7 @@ class TaskModel {
       description: json['description'],
       date: json['date'],
       time: json['time'],
+      isFavorite: json['isFavorite'] ?? false,
     );
 
   Map<String, dynamic> toJson() {
@@ -33,6 +36,7 @@ class TaskModel {
       'description': description,
       'date': date,
       'time': time,
+      'isFavorite': isFavorite,
     };
   }
 }

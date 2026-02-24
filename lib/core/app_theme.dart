@@ -64,6 +64,11 @@ class AppTheme {
         fontWeight: FontWeight.w400,
         color: Color(0xFF686868),
       ),
+      headlineMedium: GoogleFonts.poppins(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFF0E3A99),
+      ),
       headlineSmall: GoogleFonts.poppins(
         fontSize: 14,
         fontWeight: FontWeight.w400,
@@ -189,6 +194,11 @@ class AppTheme {
         fontSize: 14,
         fontWeight: FontWeight.w400,
         color: Color(0xFFD6D6D6),
+      ),
+      headlineMedium: GoogleFonts.poppins(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFF457AED),
       ),
       headlineSmall: GoogleFonts.poppins(
         fontSize: 14,

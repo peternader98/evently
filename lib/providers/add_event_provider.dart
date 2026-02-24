@@ -30,8 +30,8 @@ class AddEventProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  addEvent(TaskModel taskModel) {
-    FirebaseFunctions.createTask(taskModel);
+  addEvent(TaskModel taskModel) async {
+    await FirebaseFunctions.createTask(taskModel);
     notifyListeners();
   }
 }
