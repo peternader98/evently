@@ -33,6 +33,12 @@ class HomePageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  deleteTask(int index) async {
+    FirebaseFunctions.deleteTask(events[index]);
+    events.removeAt(index);
+    notifyListeners();
+  }
+
   getStreamTasks() {
     if(streamSubscription != null) {
       streamSubscription!.cancel();

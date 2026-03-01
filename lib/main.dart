@@ -1,11 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/core/app_theme.dart';
 import 'package:evently/firebase_options.dart';
+import 'package:evently/providers/auth_provider.dart';
 import 'package:evently/providers/theme_provider.dart';
 import 'package:evently/screens/add_event/add_event.dart';
 import 'package:evently/screens/authentication/forget_password.dart';
 import 'package:evently/screens/authentication/login.dart';
 import 'package:evently/screens/authentication/register.dart';
+import 'package:evently/screens/details/details.dart';
+import 'package:evently/screens/edit/edit.dart';
 import 'package:evently/screens/home/home.dart';
 import 'package:evently/screens/onboarding/onboarding.dart';
 import 'package:evently/screens/onboarding/onboarding_screen.dart';
@@ -27,8 +30,11 @@ void main() async {
       supportedLocales: const [Locale('en', 'US'), Locale('ar', 'EG')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en', 'US'),
-      child: ChangeNotifierProvider(
-        create: (context) => ThemeProvider(),
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => ThemeProvider()),
+          ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ],
         child: MyApp(),
       ),
     ),
@@ -41,6 +47,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
     return MaterialApp(
       localizationsDelegates: context.localizationDelegates,
@@ -51,7 +58,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeProvider.themeMode,
-      initialRoute: Onboarding.routeName,
+      initialRoute: authProvider.user != null ? Home.routeName : Onboarding.routeName,
       routes: {
         Onboarding.routeName: (context) => const Onboarding(),
         OnboardingScreen.routeName: (context) => const OnboardingScreen(),
@@ -60,6 +67,8 @@ class MyApp extends StatelessWidget {
         ForgetPassword.routeName: (context) => const ForgetPassword(),
         Home.routeName: (context) => Home(),
         AddEvent.routeName: (context) => AddEvent(),
+        Details.routeName: (context) => Details(),
+        Edit.routeName: (context) => Edit(),
       },
     );
   }

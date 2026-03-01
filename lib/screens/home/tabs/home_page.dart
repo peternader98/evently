@@ -1,10 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/core/firebase_functions.dart';
+import 'package:evently/providers/auth_provider.dart';
 import 'package:evently/providers/home_page_provider.dart';
 import 'package:evently/providers/theme_provider.dart';
+import 'package:evently/screens/details/details.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -14,6 +17,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeProvider theme = Provider.of<ThemeProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
     return ChangeNotifierProvider(
       create: (context) => HomePageProvider()..getStreamTasks(),
@@ -33,7 +37,7 @@ class HomePage extends StatelessWidget {
                   style: Theme.of(context).textTheme.displaySmall,
                 ),
                 Text(
-                  'Peter Nader',
+                  authProvider.userModel?.name ?? 'NA',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ],
@@ -113,86 +117,121 @@ class HomePage extends StatelessWidget {
                       ? Center(child: Text('noEvents'.tr()))
                       : ListView.separated(
                           itemBuilder: (context, index) {
-                            return Container(
-                              width: double.infinity,
-                              height: 193,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Stack(
+                            return Slidable(
+                              // Specify a key if the Slidable is dismissible.
+                              key: const ValueKey(0),
+
+                              startActionPane: ActionPane(
+                                // A motion is a widget used to control how the pane animates.
+                                motion: const DrawerMotion(),
+
+                                // A pane can dismiss the Slidable.
+                                dismissible: DismissiblePane(onDismissed: () {}),
+
+                                // All actions are defined in the children parameter.
                                 children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(16),
-                                    child: Image.asset(
-                                      'assets/images/${theme.themeMode == ThemeMode.light ? 'light_' : 'dark_'}${providerWatch.events[index].category.toLowerCase().replaceAll(' ', '_')}.png',
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                    ),
+                                  // A SlidableAction can have an icon and/or a label.
+                                  SlidableAction(
+                                    onPressed: (context) {
+                                        providerWatch.deleteTask(index);
+                                    },
+                                    backgroundColor: Theme.of(context).colorScheme.error,
+                                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                                    icon: Icons.delete,
+                                    label: 'delete'.tr(),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.all(8),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              8,
-                                            ),
-                                            color: Theme.of(
-                                              context,
-                                            ).colorScheme.surface,
-                                          ),
-                                          child: Text(
-                                            formatter.format(
-                                              DateTime.fromMillisecondsSinceEpoch(
-                                                providerWatch.events[index].date,
-                                              ),
-                                            ),
-                                            style: Theme.of(
-                                              context,
-                                            ).textTheme.headlineMedium,
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.all(8),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              8,
-                                            ),
-                                            color: Theme.of(
-                                              context,
-                                            ).colorScheme.surface,
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                providerWatch.events[index].title,
-                                                style: Theme.of(
-                                                  context,
-                                                ).textTheme.headlineSmall,
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  var task = providerWatch.events[index];
-                                                  task.isFavorite = !task.isFavorite;
-                                                  FirebaseFunctions.updateTask(task);
-                                                },
-                                                child: Icon(providerWatch.events[index].isFavorite ? Icons.favorite : Icons.favorite_border),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                  SlidableAction(
+                                    onPressed: (context) {
+                                      Navigator.of(context).pushNamed(Details.routeName, arguments: providerWatch.events[index]);
+                                    },
+                                    backgroundColor: Theme.of(context).colorScheme.primary,
+                                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                                    icon: Icons.list_alt,
+                                    label: 'details'.tr(),
                                   ),
                                 ],
+                              ),
+                              child: Container(
+                                width: double.infinity,
+                                height: 193,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: Image.asset(
+                                        'assets/images/${theme.themeMode == ThemeMode.light ? 'light_' : 'dark_'}${providerWatch.events[index].category.toLowerCase().replaceAll(' ', '_')}.png',
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.all(8),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(
+                                                8,
+                                              ),
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.surface,
+                                            ),
+                                            child: Text(
+                                              formatter.format(
+                                                DateTime.fromMillisecondsSinceEpoch(
+                                                  providerWatch.events[index].date,
+                                                ),
+                                              ),
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.headlineMedium,
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.all(8),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(
+                                                8,
+                                              ),
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.surface,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text(
+                                                  providerWatch.events[index].title,
+                                                  style: Theme.of(
+                                                    context,
+                                                  ).textTheme.headlineSmall,
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    var task = providerWatch.events[index];
+                                                    task.isFavorite = !task.isFavorite;
+                                                    FirebaseFunctions.updateTask(task);
+                                                  },
+                                                  child: Icon(providerWatch.events[index].isFavorite ? Icons.favorite : Icons.favorite_border),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           },

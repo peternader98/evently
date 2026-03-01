@@ -1,16 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/models/task_model.dart';
-import 'package:evently/providers/add_event_provider.dart';
+import 'package:evently/providers/edit_provider.dart';
 import 'package:evently/providers/theme_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class AddEvent extends StatelessWidget {
-  static const String routeName = 'addEvent';
+class Edit extends StatelessWidget {
+  static const String routeName = 'edit';
 
-  AddEvent({super.key});
+  Edit({super.key});
 
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -19,16 +19,20 @@ class AddEvent extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeProvider theme = Provider.of<ThemeProvider>(context);
 
+    TaskModel arg = ModalRoute.of(context)!.settings.arguments as TaskModel;
+
     return ChangeNotifierProvider(
-      create: (context) => AddEventProvider(),
+      create: (context) => EditProvider()..getTaskDetails(arg),
       builder: (context, child) {
-        AddEventProvider addEvent = Provider.of<AddEventProvider>(context);
+        EditProvider edit = Provider.of<EditProvider>(context);
+        titleController.text = edit.taskModel!.title;
+        descriptionController.text = edit.taskModel!.description;
 
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: AppBar(
             title: Text(
-              'addEvent'.tr(),
+              'edit'.tr(),
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
@@ -44,7 +48,7 @@ class AddEvent extends StatelessWidget {
                     child: Center(
                       child: Image.asset(
                         'assets/images/${theme.themeMode == ThemeMode.light ? 'light_' : 'dark_'}'
-                        '${addEvent.categories[addEvent.selectedIndex].toLowerCase().replaceAll(' ', '_')}.png',
+                            '${edit.categories[edit.selectedIndex].toLowerCase().replaceAll(' ', '_')}.png',
                       ),
                     ),
                   ),
@@ -54,27 +58,27 @@ class AddEvent extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) => GestureDetector(
                         onTap: () {
-                          addEvent.changeIndex(index);
+                          edit.changeIndex(index);
                         },
                         child: Chip(
-                          label: Text(addEvent.categories[index]),
-                          labelStyle: addEvent.selectedIndex == index
+                          label: Text(edit.categories[index]),
+                          labelStyle: edit.selectedIndex == index
                               ? GoogleFonts.poppins(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xFFFFFFFF),
-                                )
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFFFFFFFF),
+                          )
                               : Theme.of(context).textTheme.bodyMedium,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
                           ),
-                          backgroundColor: addEvent.selectedIndex == index
+                          backgroundColor: edit.selectedIndex == index
                               ? Theme.of(context).colorScheme.primary
                               : Theme.of(context).colorScheme.onPrimary,
                         ),
                       ),
                       separatorBuilder: (context, index) => SizedBox(width: 8),
-                      itemCount: addEvent.categories.length,
+                      itemCount: edit.categories.length,
                     ),
                   ),
                   Text(
@@ -160,21 +164,21 @@ class AddEvent extends StatelessWidget {
                             context: context,
                             firstDate: DateTime.now(),
                             lastDate: DateTime.now().add(Duration(days: 365)),
-                            initialDate: DateTime.now(),
+                            initialDate: DateTime.fromMillisecondsSinceEpoch(arg.date),
                           );
                           if (chosenDate != null) {
-                            addEvent.changeDate(chosenDate);
+                            edit.changeDate(chosenDate);
                           }
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: Theme.of(context).colorScheme.surface,
                         ),
                         child: Text(
-                          addEvent.selectedDate != null
+                          edit.selectedDate != null
                               ? DateFormat(
-                                  'MMM dd, yyyy',
-                                ).format(addEvent.selectedDate!)
-                              : 'chooseDate'.tr(),
+                            'MMM dd, yyyy',
+                          ).format(edit.selectedDate!)
+                              : edit.getDate(),
                         ),
                       ),
                     ],
@@ -199,14 +203,14 @@ class AddEvent extends StatelessWidget {
                             initialTime: TimeOfDay.now(),
                           );
                           if (chosenTime != null) {
-                            addEvent.changeTime(chosenTime);
+                            edit.changeTime(chosenTime);
                           }
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: Theme.of(context).colorScheme.surface,
                         ),
                         child: Text(
-                          addEvent.selectedTime?.format(context) ?? 'chooseTime'.tr(),
+                          edit.selectedTime?.format(context) ?? edit.getTime(),
                         ),
                       ),
                     ],
@@ -220,20 +224,20 @@ class AddEvent extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        addEvent.addEvent(
+                        edit.editEvent(
                           TaskModel(
-                            category: addEvent.categories[addEvent.selectedIndex],
+                            category: edit.categories[edit.selectedIndex],
                             title: titleController.text,
                             description: descriptionController.text,
-                            date: addEvent.selectedDate!.millisecondsSinceEpoch,
-                            time: addEvent.selectedTime!.toString(),
+                            date: edit.selectedDate?.millisecondsSinceEpoch ?? arg.date,
+                            time: edit.selectedTime?.toString() ?? arg.time,
                             userId: FirebaseAuth.instance.currentUser!.uid,
                           ),
                         );
 
                         Navigator.of(context).pop();
                       },
-                      child: Text('addEvent'.tr()),
+                      child: Text('updateEvent'.tr()),
                     ),
                   ),
                 ],
@@ -241,7 +245,7 @@ class AddEvent extends StatelessWidget {
             ),
           ),
         );
-      },
+      }
     );
   }
 }

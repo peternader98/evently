@@ -48,5 +48,11 @@
   "favorite" : "Favorite",
   "profile" : "Profile",
   "noEvents" : "No Events",
-  "" : ""
+  "hint" : "Search for event",
+  "darkMode" : "Dark Mode",
+  "logout" : "Logout",
+  "delete" : "Delete",
+  "details" : "Event details",
+  "edit" : "Edit event",
+  "updateEvent" : "Update event"
 }

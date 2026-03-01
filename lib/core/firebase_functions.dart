@@ -1,9 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently/models/task_model.dart';
+import 'package:evently/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseFunctions {
+
+  static CollectionReference<UserModel> getUsersCollection() {
+    return FirebaseFirestore.instance
+        .collection('Users')
+        .withConverter<UserModel>(
+      fromFirestore: (snapshot, options) {
+        return UserModel.fromJson(snapshot.data()!);
+      },
+      toFirestore: (taskModel, options) {
+        return taskModel.toJson();
+      },
+    );
+  }
 
   static CollectionReference<TaskModel> getTasksCollection() {
     return FirebaseFirestore.instance
@@ -18,6 +32,12 @@ class FirebaseFunctions {
     );
   }
 
+  static Future<void> createUserDB(UserModel user) {
+    var collection = getUsersCollection();
+    var doc = collection.doc(user.id);
+    return doc.set(user);
+  }
+
   static Future<void> createTask(TaskModel task) {
     var collection = getTasksCollection();
     var doc = collection.doc();
@@ -25,9 +45,9 @@ class FirebaseFunctions {
     return doc.set(task);
   }
 
-  static Future<void> updateTask(TaskModel task) {
+  static Future<void> updateTask(TaskModel task) async {
     var collection = getTasksCollection();
-    return collection.doc(task.id).update(task.toJson());
+    return await collection.doc(task.id).update(task.toJson());
   }
 
   static Future<void> deleteTask(TaskModel task) {
@@ -38,9 +58,9 @@ class FirebaseFunctions {
   static Stream<QuerySnapshot<TaskModel>> getStreamTasks({String? category}) {
     var collection = getTasksCollection();
     if (category != null) {
-      return collection.where('category', isEqualTo: category).snapshots();
+      return collection.where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid).where('category', isEqualTo: category).snapshots();
     }
-    return collection.snapshots();
+    return collection.where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid).snapshots();
   }
 
   static Stream<QuerySnapshot<TaskModel>> getFavoriteTasks() {
@@ -51,6 +71,17 @@ class FirebaseFunctions {
   static Future<QuerySnapshot<TaskModel>> getTasks() {
     var collection = getTasksCollection();
     return collection.get();
+  }
+
+  static Future<DocumentSnapshot<TaskModel>> getTask(TaskModel task) {
+    var collection = getTasksCollection();
+    return collection.doc(task.id).get();
+  }
+
+  static Future<UserModel?> getUser() async {
+    var collection = getUsersCollection();
+    var doc = await collection.doc(FirebaseAuth.instance.currentUser!.uid).get();
+    return doc.data();
   }
 
   static Future<void> createUser(
@@ -64,7 +95,16 @@ class FirebaseFunctions {
             email: emailAddress,
             password: password,
           );
+
       // save user data to firestore
+      createUserDB(
+        UserModel(
+          id: credential.user!.uid,
+          email: emailAddress,
+          name: name,
+          createAt: DateTime.now().millisecondsSinceEpoch,
+        ),
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -76,12 +116,13 @@ class FirebaseFunctions {
     }
   }
 
-  static Future<void> login(String emailAddress, String password) async {
+  static Future<UserCredential?> login(String emailAddress, String password) async {
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailAddress,
         password: password,
       );
+      return credential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
