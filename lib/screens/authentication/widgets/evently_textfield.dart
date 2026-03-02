@@ -30,8 +30,8 @@ class _EventlyTextfieldState extends State<EventlyTextfield> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
       cursorColor: Theme.of(context).colorScheme.primary,
+      style: Theme.of(context).textTheme.headlineSmall,
       obscureText: secure,
       controller: widget.controller,
       validator: (value) {

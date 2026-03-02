@@ -34,6 +34,11 @@ class AppTheme {
         fontWeight: FontWeight.w500,
         color: Color(0xFF1C1C1C),
       ),
+      bodyMedium: GoogleFonts.poppins(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        color: Color(0xFF1C1C1C),
+      ),
       bodySmall: GoogleFonts.poppins(
         fontSize: 16,
         fontWeight: FontWeight.w400,
@@ -59,6 +64,19 @@ class AppTheme {
         fontWeight: FontWeight.w400,
         color: Color(0xFF686868),
       ),
+      headlineMedium: GoogleFonts.poppins(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFF0E3A99),
+      ),
+      headlineSmall: GoogleFonts.poppins(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: Color(0xFF1C1C1C),
+      ),
+    ),
+    iconTheme: IconThemeData(
+      color: Color(0xFF0E3A99),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -85,6 +103,33 @@ class AppTheme {
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         elevation: 0,
       ),
+    ),
+    iconButtonTheme: IconButtonThemeData(
+      style: IconButton.styleFrom(
+        foregroundColor: Color(0xFF0E3A99),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        elevation: 0,
+      ),
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: Color(0xFFFFFFFF),
+      selectedItemColor: Color(0xFF0E3A99),
+      unselectedItemColor: Color(0xFF686868),
+      selectedLabelStyle: GoogleFonts.poppins(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        color: Color(0xFF0E3A99),
+      ),
+      unselectedLabelStyle: GoogleFonts.poppins(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        color: Color(0xFFB9B9B9),
+      ),
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      backgroundColor: Color(0xFF0E3A99),
+      foregroundColor: Color(0xFFFFFFFF),
     ),
   );
 
@@ -118,7 +163,12 @@ class AppTheme {
       titleSmall: GoogleFonts.poppins(
         fontSize: 18,
         fontWeight: FontWeight.w500,
-        color: Color(0xFF1C1C1C),
+        color: Color(0xFFFFFFFF),
+      ),
+      bodyMedium: GoogleFonts.poppins(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        color: Color(0xFFFFFFFF),
       ),
       bodySmall: GoogleFonts.poppins(
         fontSize: 16,
@@ -145,6 +195,19 @@ class AppTheme {
         fontWeight: FontWeight.w400,
         color: Color(0xFFD6D6D6),
       ),
+      headlineMedium: GoogleFonts.poppins(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFF457AED),
+      ),
+      headlineSmall: GoogleFonts.poppins(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: Color(0xFFD6D6D6),
+      ),
+    ),
+    iconTheme: IconThemeData(
+      color: Color(0xFF457AED),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -161,7 +224,7 @@ class AppTheme {
     ),
     textButtonTheme: TextButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFF001440),
+        backgroundColor: Color(0xFF457AED),
         foregroundColor: Color(0xFFFFFFFF),
         textStyle: GoogleFonts.poppins(
           fontSize: 14,
@@ -171,6 +234,34 @@ class AppTheme {
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         elevation: 0,
       ),
+    ),
+    iconButtonTheme: IconButtonThemeData(
+      style: IconButton.styleFrom(
+        foregroundColor: Color(0xFF457AED),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        elevation: 0,
+      ),
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: Color(0xFF000F30),
+      selectedItemColor: Color(0xFF457AED),
+      unselectedItemColor: Color(0xFF686868),
+      selectedLabelStyle: GoogleFonts.poppins(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        color: Color(0xFF457AED),
+      ),
+      unselectedLabelStyle: GoogleFonts.poppins(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        color: Color(0xFFB9B9B9),
+      ),
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      backgroundColor: Color(0xFF457AED),
+      foregroundColor: Color(0xFFFFFFFF),
     ),
   );
 }
